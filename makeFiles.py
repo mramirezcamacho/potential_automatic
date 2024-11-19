@@ -1,11 +1,35 @@
 import os
 import pandas as pd
 import numpy as np
+import warnings
+
+# Filter out FutureWarning
+warnings.filterwarnings("ignore", category=FutureWarning,
+                        module="numpy._core.fromnumeric")
 
 lastDocColumns = ['*shopID', 'Operations Category (Grocery)', 'Block orders in Cash?',
                   "If the store accepts cash payment by couriers?", 'Suspend POS Terminal Orders?', 'Payment setting for shopper mode stores', 'Picking Mode', 'Leads Potential']
 
 important_columns = ['country_code', 'shop_id', 'potential', 'new_potential']
+
+
+def delete_all_files(folder_path):
+    try:
+        # List all files in the folder
+        files = os.listdir(folder_path)
+
+        # Loop through the files and delete them
+        for file in files:
+            file_path = os.path.join(folder_path, file)
+
+            # Only delete files (ignore subdirectories)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            else:
+                print(f"Skipped (not a file): {file_path}")
+
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 def get_most_recent_csv(folder_path):
@@ -46,7 +70,6 @@ def divide_per_country():
     for pais in paises:
         data_to_insert = df_global[df_global['country_code'] == pais]
         data_to_insert = data_to_insert[data_to_insert['has_to_change'] == True]
-        print(data_to_insert)
         data_per_country[pais] = data_to_insert
 
     # Create a new dictionary to store the split DataFrames
@@ -70,6 +93,8 @@ def divide_per_country():
                                    'Leads Potential': row['new_potential']},
                                   ignore_index=True)
         for_production[file_name] = newDF
+
+    delete_all_files("files_to_upload")
 
     for file_name, df_small in for_production.items():
         df_small.to_excel(
