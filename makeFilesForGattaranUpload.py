@@ -50,7 +50,7 @@ def get_most_recent_csv(folder_path):
 
 def divide_per_country():
     df_global = pd.read_csv(
-        f'data_new_old_priority/{get_most_recent_csv('data_new_old_priority')}')
+        f'gattaran_files/data_new_old_priority/{get_most_recent_csv('gattaran_files/data_new_old_priority')}')
     columns_to_check = ['shop_id', 'new_potential']
 
     df_global['potential'] = df_global['potential'].apply(
@@ -95,11 +95,11 @@ def divide_per_country():
                                   ignore_index=True)
         for_production[file_name] = newDF
 
-    delete_all_files("files_to_upload")
+    delete_all_files("gattaran_files/files_to_upload")
 
     for file_name, df_small in for_production.items():
         df_small.to_excel(
-            f'files_to_upload/{file_name}.xlsx', index=False, engine='openpyxl')
+            f'gattaran_files/files_to_upload/{file_name}.xlsx', index=False, engine='openpyxl')
 
 
 if __name__ == '__main__':

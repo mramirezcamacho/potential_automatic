@@ -179,7 +179,7 @@ def doAllProcess(driver, country, filename):
     upload_input = driver.find_element(By.CSS_SELECTOR, 'input[type="file"]')
 
     upload_input.send_keys(
-        f'{os.path.dirname(os.path.abspath(__file__))}/files_to_upload/{filename}')
+        f'{os.path.dirname(os.path.abspath(__file__))}/gattaran_files/files_to_upload/{filename}')
 
     sleep(5)
 
@@ -212,7 +212,7 @@ def doSelenium():
             raise ValueError
     print('Ya acabé el tutorial')
     sleep(3)
-    files = get_xlsx_files('files_to_upload')
+    files = get_xlsx_files('gattaran_files/files_to_upload')
     for country in countries:
         importantFiles = [x for x in files if diminutive[country] in x]
         for file in importantFiles:

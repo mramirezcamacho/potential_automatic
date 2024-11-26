@@ -74,8 +74,8 @@ def joinFiles(fileNameOfPredictions):
     joinedDF = joinedDF.rename(columns={'new_rank': 'new_potential'})
     joinedDF = joinedDF.reset_index(drop=True)  # Reiniciar los índices
     df_filtrado = joinedDF[joinedDF['potential'] != joinedDF['new_potential']]
-    df_filtrado[["country_code", "first_online_date", "shop_id", "potential", "new_potential"]].to_csv(
-        f'data_new_old_priority/data_{datetime.today().strftime('%Y-%m-%d')}.csv', index=False)
+    df_filtrado[["shop_id", "new_potential"]].to_csv(
+        f'gattaran_files/data_new_old_priority/data_{datetime.today().strftime('%Y-%m-%d')}.csv', index=False)
 
 
 def predictFile(fileToPredict):
@@ -83,11 +83,11 @@ def predictFile(fileToPredict):
     saveLocation = f'ML/{PREDICTIONS}'
     fileNameOfPredictions = fileToPredict.split(
         '.')[0]+'_prediction.'+fileToPredict.split('.')[1]
-    """newData = divideDataPerCityForPrediction(fileLocation=fileLocation)
+    newData = divideDataPerCityForPrediction(fileLocation=fileLocation)
     predictUsingModels(newData, saveLocation,
-                       fileNameOfPredictions, fileLocation)"""
+                       fileNameOfPredictions, fileLocation)
     joinFiles(fileNameOfPredictions)
 
 
 if __name__ == '__main__':
-    predictFile('NewRankDataset_october22.csv')
+    predictFile('NewRankDataset (8).csv')
