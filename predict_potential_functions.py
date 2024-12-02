@@ -46,7 +46,14 @@ def getData(fileLocation: str):
 
 
 def prettify_city_names(city_name: str):
-    return city_name.replace("¨¢_", "a").replace('¨ª', 'i').replace("¨²", 'u').replace("¨¦", "e").replace("¨®", "o")
+    if 'medell' in city_name.lower():
+        return 'Medellin'
+    elif 'cal' in city_name.lower()[:3]:
+        return 'Cali'
+    elif 'canc' in city_name.lower()[:4]:
+        return 'Cancun'
+    else:
+        return city_name.replace("¨¢_", "a").replace('¨ª', 'i').replace("¨²", 'u').replace("¨¦", "e").replace("¨®", "o")
 
 
 def downSampling(dataPerCity: dict) -> dict:
@@ -296,10 +303,12 @@ def testExistingModels(data):
 
 
 def getDataToPredict(fileLocation: str):
-    dtype_dict = {'shop_id': str}
+    dtype_dict = {'shop_id': str, 'city_name': str, 'country_code': str}
     data = pd.read_csv(fileLocation, encoding='unicode_escape',
                        low_memory=False, dtype=dtype_dict)
     data = data.rename(columns=lambda x: x.strip())
+    data = data.rename(
+        columns=lambda col: 'city_name' if 'city_name' in col.lower() else col)
     # For now will not make this
     data = data[data['days_in_data'] > 13]
     columns_to_keep = [
@@ -319,6 +328,7 @@ def getDataToPredict(fileLocation: str):
 def divideDataPerCityForPrediction(fileLocation):
     data = getDataToPredict(fileLocation)
     data['city_name'] = data['city_name'].apply(prettify_city_names)
+    print(data)
     cities = data['city_name'].unique()
     city_datasets = {city: data[data['city_name'] == city].drop(
         'city_name', axis=1).reset_index() for city in cities}
