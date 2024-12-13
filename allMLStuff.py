@@ -62,19 +62,14 @@ def get_most_recent_csv(folder_path):
 
 
 def joinFiles(fileNameOfPredictions):
-    baseFile = get_most_recent_csv('SQL_base_data')
     dtype_dict = {'shop_id': str}
-    baseDF = pd.read_csv(f'SQL_base_data/{baseFile}', encoding='unicode_escape',
-                         low_memory=False, dtype=dtype_dict)
     addDF = pd.read_csv(f'ML/{PREDICTIONS}/{fileNameOfPredictions}', encoding='unicode_escape',
                         low_memory=False, dtype=dtype_dict)
-    joinedDF = pd.merge(
-        baseDF, addDF[['shop_id', 'new_rank']], on='shop_id', how='left')
-    joinedDF = joinedDF.dropna(subset=['new_rank'])
-    joinedDF = joinedDF.rename(columns={'new_rank': 'new_potential'})
-    joinedDF = joinedDF.reset_index(drop=True)  # Reiniciar los índices
-    df_filtrado = joinedDF[joinedDF['potential'] != joinedDF['new_potential']]
-    df_filtrado[["shop_id", "new_potential"]].to_csv(
+    addDF = addDF.dropna(subset=['new_rank'])
+    addDF = addDF.rename(columns={'new_rank': 'new_potential'})
+    addDF = addDF.reset_index(drop=True)  # Reiniciar los índices
+    df_filtrado = addDF
+    df_filtrado[["country_code", "shop_id", "new_potential"]].to_csv(
         f'gattaran_files/data_new_old_priority/data_{datetime.today().strftime('%Y-%m-%d')}.csv', index=False)
 
 
@@ -84,9 +79,12 @@ def predictFile(fileToPredict):
     fileNameOfPredictions = fileToPredict.split(
         '.')[0]+'_prediction.'+fileToPredict.split('.')[1]
     newData = divideDataPerCityForPrediction(fileLocation=fileLocation)
+    print("I'm going to predict the potential of each Rs")
     predictUsingModels(newData, saveLocation,
                        fileNameOfPredictions, fileLocation)
+    print("I'm finished with the the predictions file")
     joinFiles(fileNameOfPredictions)
+    print("All ready and set")
 
 
 if __name__ == '__main__':

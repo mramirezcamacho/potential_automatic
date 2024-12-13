@@ -186,6 +186,16 @@ def doAllProcess(driver, country, filename):
     click_button(
         driver, '//*[@id="pane-batch-operation"]/div/div[3]/button[1]')
     sleep(5)
+
+    try:
+        click_button(
+            driver, '/html/body/div[5]/div/div[3]/button[2]'
+        )
+        print('confirmation found')
+    except:
+        pass
+    sleep(5)
+
     driver.get(
         'https://gattaran.didi-food.com/v2/gtr_crm/bizopp/updateSignStores/batch-operation')
     sleep(5)

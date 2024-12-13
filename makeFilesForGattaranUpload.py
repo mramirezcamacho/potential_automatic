@@ -7,10 +7,8 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning,
                         module="numpy._core.fromnumeric")
 
-lastDocColumns = ['*shopID', 'Operations Category (Grocery)', 'Block orders in Cash?',
-                  "If the store accepts cash payment by couriers?", 'Suspend POS Terminal Orders?', 'Payment setting for shopper mode stores', 'Picking Mode', 'Leads Potential']
-
-important_columns = ['country_code', 'shop_id', 'potential', 'new_potential']
+lastDocColumns = pd.read_excel(
+    "gattaran_files/template/template.xlsx").columns.tolist()
 
 
 def delete_all_files(folder_path):
@@ -51,26 +49,14 @@ def get_most_recent_csv(folder_path):
 def divide_per_country():
     df_global = pd.read_csv(
         f'gattaran_files/data_new_old_priority/{get_most_recent_csv('gattaran_files/data_new_old_priority')}')
-    columns_to_check = ['shop_id', 'new_potential']
 
-    df_global['potential'] = df_global['potential'].apply(
-        lambda x: 'no_data' if pd.isna(x) or x == '' else x)
     df_global['shop_id'] = df_global['shop_id'].apply(
         lambda x: str(x))
-    nan_condition = df_global[columns_to_check].isnull()
-    empty_string_condition = df_global[columns_to_check] == ''
-    combined_condition = nan_condition | empty_string_condition
-    rows_to_drop = combined_condition.any(axis=1)
-    df_global = df_global[~rows_to_drop]
-    df_global.reset_index(drop=True, inplace=True)
-
-    df_global['has_to_change'] = df_global['potential'] != df_global['new_potential']
 
     paises = df_global['country_code'].unique()
     data_per_country = {}
     for pais in paises:
         data_to_insert = df_global[df_global['country_code'] == pais]
-        data_to_insert = data_to_insert[data_to_insert['has_to_change'] == True]
         data_per_country[pais] = data_to_insert
 
     # Create a new dictionary to store the split DataFrames

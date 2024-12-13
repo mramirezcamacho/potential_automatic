@@ -328,7 +328,6 @@ def getDataToPredict(fileLocation: str):
 def divideDataPerCityForPrediction(fileLocation):
     data = getDataToPredict(fileLocation)
     data['city_name'] = data['city_name'].apply(prettify_city_names)
-    print(data)
     cities = data['city_name'].unique()
     city_datasets = {city: data[data['city_name'] == city].drop(
         'city_name', axis=1).reset_index() for city in cities}
