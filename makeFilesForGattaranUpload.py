@@ -48,7 +48,7 @@ def get_most_recent_csv(folder_path):
 
 def divide_per_country():
     df_global = pd.read_csv(
-        f'gattaran_files/data_new_old_priority/{get_most_recent_csv('gattaran_files/data_new_old_priority')}')
+        f'''gattaran_files/data_new_old_priority/{get_most_recent_csv('gattaran_files/data_new_old_priority')}''')
 
     df_global['shop_id'] = df_global['shop_id'].apply(
         lambda x: str(x))

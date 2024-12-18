@@ -19,8 +19,6 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress INFO and WARNING messages
 warnings.filterwarnings('ignore')
 
-import tensorflow as tf  # noqa
-
 
 MODELS = 'models'
 PREDICTIONS = 'predictions'
@@ -52,6 +50,8 @@ def prettify_city_names(city_name: str):
         return 'Cali'
     elif 'canc' in city_name.lower()[:4]:
         return 'Cancun'
+    elif 'bogot' in city_name.lower()[:6]:
+        return 'Bogota D.C'
     else:
         return city_name.replace("¨¢_", "a").replace('¨ª', 'i').replace("¨²", 'u').replace("¨¦", "e").replace("¨®", "o")
 
@@ -199,8 +199,8 @@ class cityModel:
 
     def saveModel(self):
         self.renewFolder()
-        folder_path = f'ML/{
-            MODELS}/{self.name}/'
+        folder_path = f'''ML/{
+            MODELS}/{self.name}/'''
         os.makedirs(folder_path, exist_ok=True)
         fileName = folder_path + f'Model_{self.name}_{self.nameOfModel}.joblib'
         try:

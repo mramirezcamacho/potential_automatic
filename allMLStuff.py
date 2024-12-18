@@ -70,7 +70,7 @@ def joinFiles(fileNameOfPredictions):
     addDF = addDF.reset_index(drop=True)  # Reiniciar los índices
     df_filtrado = addDF
     df_filtrado[["country_code", "shop_id", "new_potential"]].to_csv(
-        f'gattaran_files/data_new_old_priority/data_{datetime.today().strftime('%Y-%m-%d')}.csv', index=False)
+        f"""gattaran_files/data_new_old_priority/data_{datetime.today().strftime('%Y-%m-%d')}.csv""", index=False)
 
 
 def predictFile(fileToPredict):
