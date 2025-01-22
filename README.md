@@ -12,7 +12,7 @@ Step by step guide to use
    
    MAC: . venv/bin/activate
    
-   WINDOWS: . venv/Scripts/activate
+   WINDOWS: .\venv\Scripts\activate
    
    
    2.3. Do the step 2. again, installing all the pip dependencies
